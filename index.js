@@ -54,7 +54,7 @@ io.on("connection", function(socket) {
     });
 });
 
-http.listen(3000);
+http.listen(process.env.PORT || 3000);
 
 function seekPartner(id, gender, age, seekGender, ageFrom, ageTo) {
     for (var partnerId in socketMap) {
