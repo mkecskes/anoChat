@@ -20,10 +20,10 @@ $(document).ready(function() {
     $("#msg form").submit(function() {
         socket.emit("message", $("#msg input").val());
         switch ($("#msg input").val()) {
-            case "nyan":
+            case "/nyan":
                 $("#messages").append($("<li>").addClass("ownmsg").prepend("Te: <img src=\"nyan.gif\" alt=\"Nyan!\">"));
                 break;
-            case "hampsterdance":
+            case "/hampsterdance":
                 $("#messages").append($("<li>").addClass("ownmsg").prepend("Te: <img src=\"hampsterdance.gif\" alt=\"Hampsterdance!\">"));
                 $("#hampsterdance").trigger("play");
                 break;
