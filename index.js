@@ -37,7 +37,11 @@ io.on("connection", function(socket) {
     
     socket.on("message", function(msg) {
         withPartner(socket.id, function(partnerId, msg) {
-            socket.broadcast.to(partnerId).emit("message", msg);
+            if (msg === "/nyan") {
+                socket.broadcast.to(partnerId).emit("nyan");
+            } else {
+                socket.broadcast.to(partnerId).emit("message", msg);
+            }
         }, msg);
     });
     

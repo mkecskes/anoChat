@@ -19,7 +19,11 @@ $(document).ready(function() {
 
     $("#msg form").submit(function() {
         socket.emit("message", $("#msg input").val());
-        $("#messages").append($("<li>").text("Te: " + $("#msg input").val()).addClass("ownmsg"));
+        if ($("#msg input").val() === "/nyan") {
+            $("#messages").append($("<li>").addClass("ownmsg").prepend("Te: <img src=\"nyan.gif\" alt=\"Nyan!\">"));
+        } else {
+            $("#messages").append($("<li>").text("Te: " + $("#msg input").val()).addClass("ownmsg"));
+        }
         $("#msg input").val("");
         scroll();
         return false;
@@ -68,6 +72,12 @@ $(document).ready(function() {
     socket.on("message", function(msg) {
         scroll();
         $("#messages").append($("<li>").text("Partnered: " + msg).addClass("partnermsg"));
+        $("#notify").trigger("play");
+    });
+    
+    socket.on("nyan", function() {
+        scroll();
+        $("#messages").append($("<li>").addClass("partnermsg").prepend("Partnered: <img src=\"nyan.gif\" alt=\"Nyan!\">"));
         $("#notify").trigger("play");
     });
 
