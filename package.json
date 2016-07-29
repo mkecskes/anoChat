@@ -2,6 +2,7 @@
   "name": "anoChat",
   "version": "1.0.0",
   "description": "An anonymous chat engine",
+  "main": "index.js",
   "dependencies": {
     "express": "^4.10.2",
     "socket.io": "^1.4.6"
