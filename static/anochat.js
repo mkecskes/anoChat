@@ -19,10 +19,16 @@ $(document).ready(function() {
 
     $("#msg form").submit(function() {
         socket.emit("message", $("#msg input").val());
-        if ($("#msg input").val() === "/nyan") {
-            $("#messages").append($("<li>").addClass("ownmsg").prepend("Te: <img src=\"nyan.gif\" alt=\"Nyan!\">"));
-        } else {
-            $("#messages").append($("<li>").text("Te: " + $("#msg input").val()).addClass("ownmsg"));
+        switch ($("#msg input").val()) {
+            case "nyan":
+                $("#messages").append($("<li>").addClass("ownmsg").prepend("Te: <img src=\"nyan.gif\" alt=\"Nyan!\">"));
+                break;
+            case "hampsterdance":
+                $("#messages").append($("<li>").addClass("ownmsg").prepend("Te: <img src=\"hampsterdance.gif\" alt=\"Hampsterdance!\">"));
+                $("#hampsterdance").trigger("play");
+                break;
+            default:
+                $("#messages").append($("<li>").text("Te: " + $("#msg input").val()).addClass("ownmsg"));
         }
         $("#msg input").val("");
         scroll();
@@ -79,6 +85,12 @@ $(document).ready(function() {
         scroll();
         $("#messages").append($("<li>").addClass("partnermsg").prepend("Partnered: <img src=\"nyan.gif\" alt=\"Nyan!\">"));
         $("#notify").trigger("play");
+    });
+    
+    socket.on("hampsterdance", function() {
+        scroll();
+        $("#messages").append($("<li>").addClass("partnermsg").prepend("Partnered: <img src=\"hampsterdance.gif\" alt=\"Hampsterdance!\">"));
+        $("#hampsterdance").trigger("play");
     });
 
     socket.on("typing start", function() {

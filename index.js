@@ -37,10 +37,15 @@ io.on("connection", function(socket) {
     
     socket.on("message", function(msg) {
         withPartner(socket.id, function(partnerId, msg) {
-            if (msg === "/nyan") {
-                socket.broadcast.to(partnerId).emit("nyan");
-            } else {
-                socket.broadcast.to(partnerId).emit("message", msg);
+            switch (msg) {
+                case "/nyan":
+                    socket.broadcast.to(partnerId).emit("nyan");
+                    break;
+                case "/hampsterdance":
+                    socket.broadcast.to(partnerId).emit("hampsterdance");
+                    break;
+                default:
+                    socket.broadcast.to(partnerId).emit("message", msg);
             }
         }, msg);
     });
