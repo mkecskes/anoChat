@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+    <head>
+        <title>anoChat</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+        <link rel="stylesheet" href="anochat.css">
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="//code.jquery.com/jquery-3.1.0.min.js"></script>
+        <script src="anochat.js"></script>
+    </head>
+    <body>
+        <audio id="notify" src="not.ogg"></audio>
+        <div id="sel">
+            <form action="">
+                <h1>anoChat</h1>
+                <ul>
+                    <li>Nemed:
+                    <select id="gender">
+                        <option value="male" selected="selected">férfi</option>
+                        <option value="female">nő</option>
+                    </select></li>
+                    <li>Korod:
+                    <input type="number" id="age" min="18" max="80" value="20"></li>
+                    <li>Partner neme:
+                    <select id="seekGender">
+                        <option value="male">férfi</option>
+                        <option value="female">nő</option>
+                        <option value="both" selected="selected">mindegy</option>
+                    </select></li>
+                    <li>Partner kora:
+                    <input type="number" id="ageFrom" min="18" max="80" value="18"> -
+                    <input type="number" id="ageTo" min="18" max="80" value="80"></li>
+                    <li><button>Mehet!</button></li>
+                </ul>
+            </form>
+        </div>
+        <div id="msg">
+            <div id="statusbar">
+                <button id="exit">Kilépés</button>
+                <div id="status"></div>
+            </div>
+            <ul id="messages"></ul>
+            <form action="">
+                <button id="send" disabled="disabled">Küldés</button>
+                <div><input disabled="disabled"></div>
+            </form>
+        </div>
+    </body>
+</html>

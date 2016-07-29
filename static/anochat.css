@@ -1,0 +1,135 @@
+html {
+    height: 100%;
+}
+
+body {
+    position: relative;
+    font: 14px Helvetica, Arial, sans-serif;
+    margin: 0;
+    background: url(bg.jpg) center fixed;
+    background-size: cover;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+#sel {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    margin: -125px 0 0 -150px;
+    height: 250px;
+    width: 300px;
+    border: 3px solid rgba(255, 255, 255, .7);
+    border-radius: 20px;
+    box-shadow: 5px 5px 2px rgba(0, 0, 0, .2);
+    background: rgba(0, 0, 0, .5);
+    color: rgb(255, 255, 255);
+    text-align: center;
+    font: 18px Helvetica, Arial, sans-serif;
+
+}
+
+#sel h1 {
+    margin: 0;
+    padding: 20px 0 5px 0;
+}
+
+#sel ul {
+    padding: 0;
+    list-style-type: none;
+}
+
+#sel li {
+    padding-bottom: 6px;
+}
+
+#sel input, #sel select, #sel button, #msg input, #send{
+    border: 2px solid rgba(255, 255, 255, .7);
+    border-radius: 4px;
+    background: rgba(0, 0, 0, .5);
+    color: rgb(255, 255, 255);
+}
+
+#sel input, #sel select{
+    padding: 2px 4px;
+}
+
+#sel button, #msg input, #send {
+    padding: 4px 8px;
+}
+
+#msg {
+    display: none;
+    height: 100%;
+}
+
+#msg form {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 28px;
+    padding: 2px;
+}
+
+#send {
+    width: 100px;
+    float: right;
+    font-weight: bold;
+}
+
+#msg form div {
+    margin-right: 126px;
+}
+
+#msg input {
+    width: 100%;
+}
+
+#msg ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    color: #fff;
+    overflow-y: scroll;
+    height: calc(100% - 64px);
+}
+
+#msg li {
+    padding: 5px 10px;
+}
+
+.ownmsg {
+    background: rgba(0, 0, 0, .5);
+}
+
+.partnermsg {
+    background: rgba(0, 0, 0, .7);
+}
+
+.event {
+    background: rgba(0, 0, 0, .5);
+    font-style: italic;
+    font-weight: bold;
+}
+
+#statusbar {
+    height: 20px;
+    padding: 6px 10px;
+    background: rgb(0, 0, 0);
+    color: #fff;
+    font-weight: bold;
+}
+
+#status {
+    margin-right: 60px;
+}
+
+#exit {
+    background: none;
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    width: 60px;
+    float: right;
+}
