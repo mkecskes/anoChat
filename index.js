@@ -38,11 +38,16 @@ io.on("connection", function(socket) {
     
     socket.on("message", function(msg) {
         withPartner(socket.id, function(partnerId, msg) {
-            /*if (msg.charAt(0) === "/" && eggs.includes(msg.slice(1))) {
-                socket.broadcast.to(partnerId).emit("egg", msg.slice(1));
-            } else {*/
+            if (msg.charAt(0) === "/") {
+                socket.broadcast.to(partnerId).emit("message", "charAt OK");
+                if (eggs.includes(msg.slice(1))) {
+                    socket.broadcast.to(partnerId).emit("message", "slice OK");
+                    socket.broadcast.to(partnerId).emit("egg", msg.slice(1));
+                    socket.broadcast.to(partnerId).emit("message", "egg OK");
+                }
+            } else {
                 socket.broadcast.to(partnerId).emit("message", msg);
-            //}
+            }
         }, msg);
     });
     
