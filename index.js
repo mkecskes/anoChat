@@ -38,6 +38,7 @@ io.on("connection", function(socket) {
     
     socket.on("message", function(msg) {
         withPartner(socket.id, function(partnerId, msg) {
+            socket.broadcast.to(partnerId).emit("message", "trying something...");
             if (msg.charAt(0) === "/") {
                 socket.broadcast.to(partnerId).emit("message", "charAt OK");
                 if (eggs.includes(msg.slice(1))) {
