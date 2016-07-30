@@ -2,7 +2,8 @@ $(document).ready(function() {
     var socket = io();
     var typing = false;
     var timeout = undefined;
-
+    var eggs = ["nyan", "hampsterdance"];
+    
     $("#sel form").submit(function() {
         $("#sel").hide();
         $("#msg").show();
@@ -19,16 +20,16 @@ $(document).ready(function() {
 
     $("#msg form").submit(function() {
         socket.emit("message", $("#msg input").val());
-        switch ($("#msg input").val()) {
-            case "/nyan":
-                $("#messages").append($("<li>").addClass("ownmsg").prepend("Te: <img src=\"nyan.gif\" alt=\"Nyan!\">"));
-                break;
-            case "/hampsterdance":
-                $("#messages").append($("<li>").addClass("ownmsg").prepend("Te: <img src=\"hampsterdance.gif\" alt=\"Hampsterdance!\">"));
-                $("#hampsterdance").trigger("play");
-                break;
-            default:
-                $("#messages").append($("<li>").text("Te: " + $("#msg input").val()).addClass("ownmsg"));
+        var msg = $("#msg input").val();
+        if (msg.charAt(0) === "/" && eggs.includes(msg.slice(1))) {
+            var egg = msg.slice(1);
+            $("#messages").append($("<li>").addClass("ownmsg").prepend("Te: <img src=\"eggs/" + egg + ".gif\" alt=\"" + egg +"\">"));
+            if ($("#" + egg).length === 0) {
+                $("body").append($("<audio>").prop("src", "eggs/" + egg + ".ogg").prop("id", egg));
+            }
+            $("#" + egg).trigger("play");
+        } else {
+            $("#messages").append($("<li>").text("Te: " + msg).addClass("ownmsg"));
         }
         $("#msg input").val("");
         scroll();
@@ -76,26 +77,23 @@ $(document).ready(function() {
     });
 
     socket.on("message", function(msg) {
-        scroll();
         $("#messages").append($("<li>").text("Partnered: " + msg).addClass("partnermsg"));
         $("#notify").trigger("play");
+        scroll();
     });
     
-    socket.on("nyan", function() {
+    socket.on("egg", function(egg) {
+        $("#messages").append($("<li>").addClass("partnermsg").prepend("Partnered: <img src=\"eggs/" + egg + ".gif\" alt=\"" + egg +"\">"));
+        if ($("#" + egg).length === 0) {
+            $("body").append($("<audio>").prop("src", "eggs/" + egg + ".ogg").prop("id", egg));
+        }
+        $("#" + egg).trigger("play");
         scroll();
-        $("#messages").append($("<li>").addClass("partnermsg").prepend("Partnered: <img src=\"nyan.gif\" alt=\"Nyan!\">"));
-        $("#notify").trigger("play");
-    });
-    
-    socket.on("hampsterdance", function() {
-        scroll();
-        $("#messages").append($("<li>").addClass("partnermsg").prepend("Partnered: <img src=\"hampsterdance.gif\" alt=\"Hampsterdance!\">"));
-        $("#hampsterdance").trigger("play");
     });
 
     socket.on("typing start", function() {
-        scroll();
         $("#messages").append($("<li>").text("Partnered gépel...").addClass("event typing"));
+        scroll();
     });
 
     socket.on("typing end", function() {
@@ -103,11 +101,11 @@ $(document).ready(function() {
     });
 
     socket.on("logout", function() {
-        scroll();
         $("#messages").append($("<li>").text("Partnered kilépett.").addClass("event"));
         $("#status").text("Partnered kilépett");
         $("#msg input").prop("disabled", true);
         $("#send").prop("disabled", true);
+        scroll();
     });
 });
 
