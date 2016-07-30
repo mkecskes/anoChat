@@ -21,16 +21,16 @@ $(document).ready(function() {
     $("#msg form").submit(function() {
         socket.emit("message", $("#msg input").val());
         var msg = $("#msg input").val();
-        if (msg.charAt(0) === "/" && eggs.includes(msg.slice(1))) {
+        /*if (msg.charAt(0) === "/" && eggs.includes(msg.slice(1))) {
             var egg = msg.slice(1);
             $("#messages").append($("<li>").addClass("ownmsg").prepend("Te: <img src=\"eggs/" + egg + ".gif\" alt=\"" + egg +"\">"));
             if ($("#" + egg).length === 0) {
                 $("body").append($("<audio>").prop("src", "eggs/" + egg + ".ogg").prop("id", egg));
             }
             $("#" + egg).trigger("play");
-        } else {
+        } else {*/
             $("#messages").append($("<li>").text("Te: " + msg).addClass("ownmsg"));
-        }
+        //}
         $("#msg input").val("");
         scroll();
         return false;
