@@ -110,5 +110,6 @@ $(document).ready(function() {
 });
 
 function scroll() {
-    //$("#messages").animate({scrollTop: $("#messages").height()}, "slow");
+    $("#messages").stop();
+    $("#messages").animate({scrollTop: $("#messages").height()}, "slow");
 }
