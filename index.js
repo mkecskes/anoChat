@@ -38,7 +38,7 @@ io.on("connection", function(socket) {
     
     socket.on("message", function(msg) {
         withPartner(socket.id, function(partnerId, msg) {
-            if (msg.charAt(0) === "/" && eggs.includes(msg.slice(1))) {
+            if (msg.charAt(0) === "/" && eggs.indexOf(msg.slice(1)) > -1) {
                 socket.broadcast.to(partnerId).emit("egg", msg.slice(1));
             } else {
                 socket.broadcast.to(partnerId).emit("message", msg);
