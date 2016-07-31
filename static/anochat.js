@@ -24,15 +24,10 @@ $(document).ready(function() {
         if (msg.charAt(0) === "/" && eggs.indexOf(msg.slice(1)) > -1) {
             var egg = msg.slice(1);
             $("#messages").append($("<li>").addClass("ownmsg").prepend("Te: <img src=\"eggs/" + egg + ".gif\" alt=\"" + egg +"\">"));
-            if ($("#" + egg).length === 0) {
-                $("body").append($("<audio>").prop("src", "eggs/" + egg + ".ogg").prop("id", egg));
-            }
-            $("#" + egg).trigger("play");
         } else {
             var el = $("<li class=\"ownmsg\">");
             addSmileys(el, "Te: ", msg);
             $("#messages").append(el);
-            $("#notify").trigger("play");
         }
         $("#msg input").val("");
         scroll();
@@ -89,10 +84,7 @@ $(document).ready(function() {
     
     socket.on("egg", function(egg) {
         $("#messages").append($("<li>").addClass("partnermsg").prepend("Partnered: <img src=\"eggs/" + egg + ".gif\" alt=\"" + egg +"\">"));
-        if ($("#" + egg).length === 0) {
-            $("body").append($("<audio>").prop("src", "eggs/" + egg + ".ogg").prop("id", egg));
-        }
-        $("#" + egg).trigger("play");
+        $("#notify").trigger("play");
         scroll();
     });
 
