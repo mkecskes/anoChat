@@ -140,8 +140,6 @@ function addSmileys(el, prefix, msg) {
     }
     
     function smileyReplace(str, si) {
-        // TODO skip empty strings
-        // TODO don't splice (take out and re-add) if the array contains only one element
         if (si === smileysArr.length) {
             return [document.createTextNode(str)];
         } else {
@@ -151,8 +149,10 @@ function addSmileys(el, prefix, msg) {
                 var dom = smileyReplace(strArr[i], si + 1);
                 strArr.splice(i, 1);
                 for (var j = 0; j < dom.length; j++) {
-                    strArr.splice(i, 0, dom[j]);
-                    i++;
+                    if (dom[j]) {
+                        strArr.splice(i, 0, dom[j]);
+                        i++;
+                    }
                 }
                 if (i < strArr.length) {
                     strArr.splice(i, 0, $("<img alt=\"" + smileysArr[si] + "\" src=\"smileys/" + smileys[smileysArr[si]] + ".png\">"));
