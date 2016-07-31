@@ -29,7 +29,10 @@ $(document).ready(function() {
             }
             $("#" + egg).trigger("play");
         } else {
-            $("#messages").append($("<li>").text("Te: " + msg).addClass("ownmsg"));
+            var el = $("<li class=\"ownmsg\">");
+            addSmileys(el, "Te: ", msg);
+            $("#messages").append(el);
+            $("#notify").trigger("play");
         }
         $("#msg input").val("");
         scroll();
@@ -77,7 +80,9 @@ $(document).ready(function() {
     });
 
     socket.on("message", function(msg) {
-        $("#messages").append($("<li>").text("Partnered: " + msg).addClass("partnermsg"));
+        var el = $("<li class=\"partnermsg\">");
+        addSmileys(el, "Partnered: ", msg);
+        $("#messages").append(el);
         $("#notify").trigger("play");
         scroll();
     });
@@ -112,4 +117,49 @@ $(document).ready(function() {
 function scroll() {
     $("#messages").stop();
     $("#messages").animate({scrollTop: $("#messages").height()}, "slow");
+}
+
+function addSmileys(el, prefix, msg) {
+    var smileys = {
+      ":)": "smiling",
+      ":(": "frowning",
+      ":D": "grinning",
+      ";)": "winking",
+      ":P": "tongue_out",
+      ":'(": "crying",
+      "<3": "heart",
+      ":*": "kissing"
+    };
+    var smileysArr = Object.keys(smileys);
+
+    el.append(prefix);
+    var arr = smileyReplace(msg, 0);
+    
+    for (var i = 0; i < arr.length; i++) {
+        el.append(arr[i]);
+    }
+    
+    function smileyReplace(str, si) {
+        // TODO skip empty strings
+        // TODO don't splice (take out and re-add) if the array contains only one element
+        if (si === smileysArr.length) {
+            return [document.createTextNode(str)];
+        } else {
+            var strArr = str.split(smileysArr[si]);
+            var i = 0;
+            while (i < strArr.length) {
+                var dom = smileyReplace(strArr[i], si + 1);
+                strArr.splice(i, 1);
+                for (var j = 0; j < dom.length; j++) {
+                    strArr.splice(i, 0, dom[j]);
+                    i++;
+                }
+                if (i < strArr.length) {
+                    strArr.splice(i, 0, $("<img alt=\"" + smileysArr[si] + "\" src=\"smileys/" + smileys[smileysArr[si]] + ".png\">"));
+                    i++;
+                }
+            }
+            return strArr;
+        }
+    }
 }
