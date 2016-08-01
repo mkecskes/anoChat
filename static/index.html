@@ -10,7 +10,7 @@
         <script src="anochat.js"></script>
     </head>
     <body>
-        <div id="sel">
+        <div id="welscr">
             <form action="">
                 <h1>anoChat</h1>
                 <ul>
@@ -30,7 +30,7 @@
                     <li>Partner kora:
                         <input type="number" id="ageFrom" min="14" max="80" value="14"> -
                         <input type="number" id="ageTo" min="14" max="80" value="80"></li>
-                    <li id="sendform"><button>Mehet!</button></li>
+                    <li><button>Mehet!</button></li>
                 </ul>
             </form>
             <div id="footer">
@@ -43,15 +43,15 @@
                     <a href="//github.com/mkecskes/anoChat">Ide kattintva</a> te magad is belenézhetsz a forráskódba és a licencnek megfelelően felhasználhatod azt.</p>
             </div>
         </div>
-        <div id="msg">
+        <div id="msgscr">
             <div id="statusbar">
-                <button id="exit">Kilépés</button>
+                <div id="exit">Kilépés</div>
                 <div id="status"></div>
             </div>
-            <ul id="messages"></ul>
+            <ul id="msglist"></ul>
             <form action="">
-                <button id="send" disabled="disabled">Küldés</button>
-                <div><input disabled="disabled"></div>
+                <button id="sendmsg" disabled="disabled">Küldés</button>
+                <div><input type="text" disabled="disabled"></div>
             </form>
         </div>
         <audio id="notify" src="sounds/notify.ogg"></audio>

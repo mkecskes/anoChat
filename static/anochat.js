@@ -4,9 +4,9 @@ $(document).ready(function() {
     var timeout = undefined;
     var eggs = ["nyan", "hampsterdance"];
     
-    $("#sel form").submit(function() {
-        $("#sel").hide();
-        $("#msg").show();
+    $("#welscr form").submit(function() {
+        $("#welscr").hide();
+        $("#msgscr").show();
         socket.emit(
             "seek",
             $("#gender").val(),
@@ -18,23 +18,23 @@ $(document).ready(function() {
         return false;
     });
 
-    $("#msg form").submit(function() {
-        socket.emit("message", $("#msg input").val());
-        var msg = $("#msg input").val();
+    $("#msgscr form").submit(function() {
+        socket.emit("message", $("#msgscr input").val());
+        var msg = $("#msgscr input").val();
         if (msg.charAt(0) === "/" && eggs.indexOf(msg.slice(1)) > -1) {
             var egg = msg.slice(1);
-            $("#messages").append($("<li>").addClass("ownmsg").prepend("Te: <img src=\"eggs/" + egg + ".gif\" alt=\"" + egg +"\">"));
+            $("#msglist").append($("<li>").addClass("ownmsg").prepend("Te: <img src=\"eggs/" + egg + ".gif\" alt=\"" + egg +"\">"));
         } else {
             var el = $("<li class=\"ownmsg\">");
             addSmileys(el, "Te: ", msg);
-            $("#messages").append(el);
+            $("#msglist").append(el);
         }
-        $("#msg input").val("");
+        $("#msgscr input").val("");
         scroll();
         return false;
     });
 
-    $("#msg input").on("keypress", function(e) {
+    $("#msgscr input").on("keypress", function(e) {
         if (e.keyCode === 13) {
             clearTimeout(timeout);
             typingEnd();
@@ -49,9 +49,9 @@ $(document).ready(function() {
     });
     
     $("#exit").click(function() {
-        $("#messages").empty();
-        $("#msg").hide();
-        $("#sel").show();
+        $("#msglist").empty();
+        $("#msgscr").hide();
+        $("#welscr").show();
         socket.emit("exit");
     });
 
@@ -67,29 +67,29 @@ $(document).ready(function() {
     socket.on("found", function(gender, age) {
         $("#status").text("Partnered: " +
             age + " éves " + (gender === "male" ? "férfi" : "nő"));
-        $("#messages").append($("<li>").text("Találtunk egy partnert. Partnered egy " +
+        $("#msglist").append($("<li>").text("Találtunk egy partnert. Partnered egy " +
             age + " éves " + (gender === "male" ? "férfi" : "nő") + ".").addClass("event"));
-        $("#msg input").prop("disabled", false);
-        $("#send").prop("disabled", false);
+        $("#msgscr input").prop("disabled", false);
+        $("#sendmsg").prop("disabled", false);
         $("#notify").trigger("play");
     });
 
     socket.on("message", function(msg) {
         var el = $("<li class=\"partnermsg\">");
         addSmileys(el, "Partnered: ", msg);
-        $("#messages").append(el);
+        $("#msglist").append(el);
         $("#notify").trigger("play");
         scroll();
     });
     
     socket.on("egg", function(egg) {
-        $("#messages").append($("<li>").addClass("partnermsg").prepend("Partnered: <img src=\"eggs/" + egg + ".gif\" alt=\"" + egg +"\">"));
+        $("#msglist").append($("<li>").addClass("partnermsg").prepend("Partnered: <img src=\"eggs/" + egg + ".gif\" alt=\"" + egg +"\">"));
         $("#notify").trigger("play");
         scroll();
     });
 
     socket.on("typing start", function() {
-        $("#messages").append($("<li>").text("Partnered gépel...").addClass("event typing"));
+        $("#msglist").append($("<li>").text("Partnered gépel...").addClass("event typing"));
         scroll();
     });
 
@@ -98,17 +98,17 @@ $(document).ready(function() {
     });
 
     socket.on("logout", function() {
-        $("#messages").append($("<li>").text("Partnered kilépett.").addClass("event"));
+        $("#msglist").append($("<li>").text("Partnered kilépett.").addClass("event"));
         $("#status").text("Partnered kilépett");
-        $("#msg input").prop("disabled", true);
-        $("#send").prop("disabled", true);
+        $("#msgscr input").prop("disabled", true);
+        $("#sendmsg").prop("disabled", true);
         scroll();
     });
 });
 
 function scroll() {
-    $("#messages").stop();
-    $("#messages").animate({scrollTop: $("#messages").prop("scrollHeight")}, "slow");
+    $("#msglist").stop();
+    $("#msglist").animate({scrollTop: $("#msglist").prop("scrollHeight")}, "slow");
 }
 
 function addSmileys(el, prefix, msg) {
