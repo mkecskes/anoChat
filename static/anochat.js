@@ -108,7 +108,7 @@ $(document).ready(function() {
 
 function scroll() {
     $("#messages").stop();
-    $("#messages").animate({scrollTop: $("#messages").height()}, "slow");
+    $("#messages").animate({scrollTop: $("#messages").prop("scrollHeight")}, "slow");
 }
 
 function addSmileys(el, prefix, msg) {
