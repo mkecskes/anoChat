@@ -79,6 +79,10 @@ body {
 }
 
 #statusbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
     height: 21px;
     padding: 5px 10px 0 10px;
     background: rgb(0, 0, 0);
@@ -152,12 +156,12 @@ body {
 
 #sendmsg {
     position: absolute;
-    right: 0;
+    right: 2px;
     width: 100px;
 }
 
 .ownmsg:hover, .partnermsg:hover, .event:hover {
-   background: rgb(0, 0, 0);
+   background: rgba(0, 0, 0, .8);
 }
 
 a {
