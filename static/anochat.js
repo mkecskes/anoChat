@@ -27,6 +27,7 @@ $(document).ready(function() {
         } else {
             var el = $("<li class=\"ownmsg\">");
             addSmileys(el, "Te: ", msg);
+            el.linkify();
             $("#msglist").append(el);
         }
         $("#msgscr input").val("");
@@ -77,6 +78,7 @@ $(document).ready(function() {
     socket.on("message", function(msg) {
         var el = $("<li class=\"partnermsg\">");
         addSmileys(el, "Partnered: ", msg);
+        el.linkify();
         $("#msglist").append(el);
         $("#notify").trigger("play");
         scroll();

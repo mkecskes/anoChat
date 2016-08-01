@@ -4,6 +4,7 @@ var http = require("http").Server(app);
 var io = require("socket.io")(http);
 
 app.use(express.static("static"));
+app.use(express.static("node_modules/linkifyjs/dist"));
 
 var socketMap = {};
 var eggs = ["nyan", "hampsterdance"];
