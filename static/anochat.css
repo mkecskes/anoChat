@@ -116,6 +116,10 @@ body {
     border-radius: 8px;
 }
 
+#msglist img {
+    vertical-align: top;
+}
+
 .ownmsg {
     background: rgba(0, 0, 0, .5);
 }
