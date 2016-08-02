@@ -5,8 +5,8 @@ $(document).ready(function() {
     var eggs = ["nyan", "hampsterdance"];
     
     $("#welscr form").submit(function() {
-        $("#welscr").hide();
-        $("#msgscr").show();
+        $("#welscr").css("display", "none");
+        $("#msgscr").css("display", "flex");
         socket.emit(
             "seek",
             $("#gender").val(),
@@ -51,8 +51,8 @@ $(document).ready(function() {
     
     $("#exit").click(function() {
         $("#msglist").empty();
-        $("#msgscr").hide();
-        $("#welscr").show();
+        $("#msgscr").css("display", "none");
+        $("#welscr").css("display", "flex");
         socket.emit("exit");
     });
 
