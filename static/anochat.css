@@ -59,6 +59,10 @@ body {
     padding: 2px 4px;
 }
 
+#welscr input[type="number"] {
+    width: 2em;
+}
+
 #welscr button{
     padding: 4px 8px;
 }
