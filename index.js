@@ -27,6 +27,7 @@ io.on("connection", function(socket) {
             socket.broadcast.to(partnerId).emit("logout");
             delete activeConvos[partnerId];
         });
+        delete waitingPartners[socket.id];
         delete activeConvos[socket.id];
     });
     
@@ -35,6 +36,7 @@ io.on("connection", function(socket) {
             socket.broadcast.to(partnerId).emit("logout");
             delete activeConvos[partnerId];
         });
+        delete waitingPartners[socket.id];
         delete activeConvos[socket.id];
     });
     

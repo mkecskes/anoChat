@@ -54,6 +54,7 @@ $(document).ready(function() {
         $("#msgscr").css("display", "none");
         $("#welscr").css("display", "flex");
         socket.emit("exit");
+        window.onbeforeunload = null;
     });
 
     function typingEnd() {
@@ -73,6 +74,9 @@ $(document).ready(function() {
         $("#msgscr input").prop("disabled", false);
         $("#sendmsg").prop("disabled", false);
         $("#notify").trigger("play");
+        window.onbeforeunload = function() {
+            return true;
+        };
     });
 
     socket.on("message", function(msg) {
@@ -105,6 +109,7 @@ $(document).ready(function() {
         $("#msgscr input").prop("disabled", true);
         $("#sendmsg").prop("disabled", true);
         scroll();
+        window.onbeforeunload = null;
     });
 });
 
