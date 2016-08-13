@@ -6,35 +6,36 @@ var io = require("socket.io")(http);
 app.use(express.static("static"));
 app.use(express.static("node_modules/linkifyjs/dist"));
 
-var socketMap = {};
+var waitingPartners = {};
+var activeConvos = {};
 var eggs = ["nyan", "hampsterdance"];
 
 io.on("connection", function(socket) {
     socket.on("seek", function(gender, age, seekGender, ageFrom, ageTo) {
-        var partnerId = seekPartner(socket.id, gender, age, seekGender, ageFrom, ageTo);
-        if (partnerId) {
-            socket.emit("found", socketMap[partnerId].gender, socketMap[partnerId].age);
-            socket.broadcast.to(partnerId).emit("found", gender, age);
+        var partner = seekPartner(socket.id, gender, age, seekGender, ageFrom, ageTo);
+        if (partner) {
+            socket.emit("found", partner.gender, partner.age);
+            socket.broadcast.to(partner.id).emit("found", gender, age);
         } else {
             socket.emit("waiting");
-            newPartner(socket.id, gender, age, seekGender, ageFrom, ageTo);
+            addToWaiting(socket.id, gender, age, seekGender, ageFrom, ageTo);
         }
     });
     
     socket.on("exit", function() {
         withPartner(socket.id, function(partnerId) {
             socket.broadcast.to(partnerId).emit("logout");
-            socketMap[partnerId].currentPartner = "closed";
+            delete activeConvos[partnerId];
         });
-        delete socketMap[socket.id];
+        delete activeConvos[socket.id];
     });
     
     socket.on("disconnect", function() {
         withPartner(socket.id, function(partnerId) {
             socket.broadcast.to(partnerId).emit("logout");
-            socketMap[partnerId].currentPartner = "closed";
+            delete activeConvos[partnerId];
         });
-        delete socketMap[socket.id];
+        delete activeConvos[socket.id];
     });
     
     socket.on("message", function(msg) {
@@ -63,10 +64,9 @@ io.on("connection", function(socket) {
 http.listen(process.env.PORT || 8080);
 
 function seekPartner(id, gender, age, seekGender, ageFrom, ageTo) {
-    for (var partnerId in socketMap) {
-        var partner = socketMap[partnerId];
+    for (var partnerId in waitingPartners) {
+        var partner = waitingPartners[partnerId];
         if (
-            partner.currentPartner === null &&
             (seekGender === "both" || partner.gender === seekGender) &&
             partner.age >= ageFrom &&
             partner.age <= ageTo &&
@@ -74,17 +74,16 @@ function seekPartner(id, gender, age, seekGender, ageFrom, ageTo) {
             partner.ageFrom <= age &&
             partner.ageTo >= age
         ) {
-            partner.currentPartner = id;
-            socketMap[id] = {currentPartner: partnerId};
-            return partnerId;
+            delete waitingPartners[partnerId]; // we have to store the user's data on client side in case of reconnecting, because we don't store them at server side (or we have to do that)
+            addToActive(id, partnerId);
+            return {id: partnerId, age: partner.age, gender: partner.gender};
         }
     }
     return false;
 }
 
-function newPartner(id, gender, age, seekGender, ageFrom, ageTo) {
-    socketMap[id] = {
-        currentPartner: null,
+function addToWaiting(id, gender, age, seekGender, ageFrom, ageTo) {
+    waitingPartners[id] = {
         gender: gender,
         age: age,
         seekGender: seekGender,
@@ -93,8 +92,13 @@ function newPartner(id, gender, age, seekGender, ageFrom, ageTo) {
     };
 }
 
+function addToActive(id1, id2) {
+    activeConvos[id1] = id2;
+    activeConvos[id2] = id1;
+}
+
 function withPartner(socketId, callback, msg) {
-    if (socketMap[socketId] && socketMap[socketId].currentPartner && socketMap[socketId].currentPartner !== "closed") {
-        callback(socketMap[socketId].currentPartner, msg);
+    if (activeConvos[socketId]) {
+        callback(activeConvos[socketId], msg);
     }
 }
