@@ -100,10 +100,6 @@ body {
     flex: 1;
 }
 
-#exit {
-    cursor: pointer;
-}
-
 #msglist {
     flex: 1;
     overflow: auto;
@@ -161,10 +157,12 @@ body {
     background: rgba(0, 0, 0, .8);
 }
 
-a {
+a, .link {
     color: rgb(255, 255, 255);
+    text-decoration: underline;
+    cursor: pointer;
 }
 
-a:hover {
+a:hover, .link:hover {
     text-decoration: none;
 }

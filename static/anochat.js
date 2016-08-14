@@ -17,15 +17,15 @@ $(document).ready(function() {
         );
         return false;
     });
-
+    
     $("#msgscr form").submit(function() {
         socket.emit("message", $("#msgscr input").val());
         var msg = $("#msgscr input").val();
         if (msg.charAt(0) === "/" && eggs.indexOf(msg.slice(1)) > -1) {
             var egg = msg.slice(1);
-            $("#msglist").append($("<li>").addClass("ownmsg").prepend("Te: <img src=\"eggs/" + egg + ".gif\" alt=\"" + egg +"\">"));
+            $("#msglist").append($("<li class=\"ownmsg\">Te: <img src=\"eggs/" + egg + ".gif\" alt=\"" + egg +"\"></li>"));
         } else {
-            var el = $("<li class=\"ownmsg\">");
+            var el = $("<li class=\"ownmsg\"></li>");
             addSmileys(el, "Te: ", msg);
             el.linkify();
             $("#msglist").append(el);
@@ -34,7 +34,7 @@ $(document).ready(function() {
         scroll();
         return false;
     });
-
+    
     $("#msgscr input").on("keypress", function(e) {
         if (e.keyCode === 13) {
             clearTimeout(timeout);
@@ -53,24 +53,26 @@ $(document).ready(function() {
         $("#msglist").empty();
         $("#msgscr").css("display", "none");
         $("#welscr").css("display", "flex");
+        $("#msgscr input").prop("disabled", true);
+        $("#sendmsg").prop("disabled", true);
         socket.emit("exit");
         window.onbeforeunload = null;
     });
-
+    
     function typingEnd() {
         typing = false;
         socket.emit("typing end");
     }
-
+    
     socket.on("waiting", function() {
         $("#status").text("Várakozás partnerre...");
     });
-
+    
     socket.on("found", function(gender, age) {
         $("#status").text("Partnered: " +
             age + " éves " + (gender === "male" ? "férfi" : "nő"));
-        $("#msglist").append($("<li>").text("Találtunk egy partnert. Partnered egy " +
-            age + " éves " + (gender === "male" ? "férfi" : "nő") + ".").addClass("event"));
+        $("#msglist").append($("<li class=\"event\">Találtunk egy partnert. Partnered egy " +
+            age + " éves " + (gender === "male" ? "férfi" : "nő") + ".</li>"));
         $("#msgscr input").prop("disabled", false);
         $("#sendmsg").prop("disabled", false);
         $("#notify").trigger("play");
@@ -78,9 +80,9 @@ $(document).ready(function() {
             return true;
         };
     });
-
+    
     socket.on("message", function(msg) {
-        var el = $("<li class=\"partnermsg\">");
+        var el = $("<li class=\"partnermsg\"></li>");
         addSmileys(el, "Partnered: ", msg);
         el.linkify();
         $("#msglist").append(el);
@@ -89,22 +91,31 @@ $(document).ready(function() {
     });
     
     socket.on("egg", function(egg) {
-        $("#msglist").append($("<li>").addClass("partnermsg").prepend("Partnered: <img src=\"eggs/" + egg + ".gif\" alt=\"" + egg +"\">"));
+        $("#msglist").append($("<li class=\"partnermsg\">Partnered: <img src=\"eggs/" + egg + ".gif\" alt=\"" + egg +"\"></li>"));
         $("#notify").trigger("play");
         scroll();
     });
-
+    
     socket.on("typing start", function() {
-        $("#msglist").append($("<li>").text("Partnered gépel...").addClass("event typing"));
+        $("#msglist").append($("<li class=\"event typing\">Partnered gépel...</li>"));
         scroll();
     });
-
+    
     socket.on("typing end", function() {
         $(".typing").remove();
     });
-
+    
     socket.on("logout", function() {
-        $("#msglist").append($("<li>").text("Partnered kilépett.").addClass("event"));
+        var reconnect = $("<span class=\"link\">Új chat</span>").click(function() {
+            $("#msglist").empty();
+            socket.emit("new chat");
+        });
+        var exit = $("<span class=\"link\">Kilépés</span>").click(function() {
+            $("#msglist").empty();
+            $("#msgscr").css("display", "none");
+            $("#welscr").css("display", "flex");
+        });
+        $("#msglist").append($("<li>Partnered kilépett. </li>").append(reconnect, " ", exit).addClass("event"));
         $("#status").text("Partnered kilépett");
         $("#msgscr input").prop("disabled", true);
         $("#sendmsg").prop("disabled", true);
